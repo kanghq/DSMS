@@ -1,0 +1,49 @@
+module com {
+module hqkang {
+module DSMS {
+module Server{
+
+	interface ClinicS {
+		struct createRes {
+			boolean res;
+			string RID;
+		};
+		struct Record {
+		string recordID;
+		string firstName;
+		string lastName;
+		string designation;
+		string status;
+		long statusdate;
+		string address;
+		string phone;
+		string specialization;
+		string location;
+		
+		};
+		struct MapItem { 
+	    string key; 
+	    string value;
+	    };
+	    
+		typedef sequence<MapItem> Hashmap;
+		Hashmap getSrvURLList();
+		Hashmap getSrvUDPList();
+		string getRecordCounts(in string AID);
+		createRes createRecord(in Record r, in string AID);
+		long getSeq();
+		boolean check(in string key);
+		boolean editRecord(in string RID, in string field, in string value, in string AID);
+		boolean setSeq(in long s);
+		Record select(in string RID);
+		boolean remove(in string RID);
+		
+		
+	};
+	
+	
+	
+};
+};
+};
+};

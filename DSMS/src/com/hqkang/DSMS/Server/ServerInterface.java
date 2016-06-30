@@ -19,11 +19,9 @@ public interface ServerInterface extends Remote{
 	public long getSeq() throws RemoteException;
 	public boolean check(String key) throws RemoteException;
 	public boolean editRecord(String RID, String field, String value, String AID) throws RemoteException;
-	public void setSeq(long s) throws RemoteException;
+	public boolean setSeq(long s) throws RemoteException;
 	public Record select(String RID) throws RemoteException;
 	public boolean remove(String RID) throws RemoteException;
 
-	
-	
 	
 }

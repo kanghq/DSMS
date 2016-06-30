@@ -1,6 +1,7 @@
 package com.hqkang.DSMS.Server;
 
 import java.io.File;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,20 +14,19 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Lock;
 
 import com.hqkang.DSMS.*;
 import com.hqkang.DSMS.DoctorRecord.Location;
 
 
 public class ClinicServer implements ServerInterface {
-	private HashMap<String, String> srvURLMap = new HashMap();
-	private HashMap<String, String> srvUDPMap = new HashMap();
+	private HashMap<String, String> srvURLMap = new HashMap<String, String>();
+	private HashMap<String, String> srvUDPMap = new HashMap<String, String>();
 	private DoctorRecord.Location location;
 	private int count = 0;
 	private Database db;
 	private static Semaphore semp = new Semaphore(1);
-	private HashMap<String, ServerInterface> srvMap = new HashMap();
+	private HashMap<String, ServerInterface> srvMap = new HashMap<String, ServerInterface>();
 	
 
 	
@@ -42,6 +42,10 @@ public class ClinicServer implements ServerInterface {
 		location = Location.valueOf(loca);
 	
 		}
+	
+	public String getMyURL() {
+		return srvURLMap.get(location.toString());
+	}
 		
 		
 	public void connect() { //connect to each server for data exchange
@@ -117,9 +121,12 @@ public class ClinicServer implements ServerInterface {
 		return seq;
 	}
 	
-	public void setSeq(long s) {	
+	public boolean setSeq(long s) {
+		boolean res = false;
 		seq = s;
-		writeLog(location + " syncing sequence completes");		
+		res = true;
+		writeLog(location + " syncing sequence completes");	
+		return res;
 	}
 	
 	
@@ -177,6 +184,7 @@ public class ClinicServer implements ServerInterface {
 		Remote obj = UnicastRemoteObject.exportObject(this, port);
 		Registry r =  LocateRegistry.createRegistry(port);
 		r.bind("srv", obj);
+		
 		System.out.println(location + " Server Exported");
 	}
 
@@ -194,7 +202,10 @@ public class ClinicServer implements ServerInterface {
 		Iterator<Entry<String, ServerInterface>> iteWrite = srvMap.entrySet().iterator();
 		while(iteWrite.hasNext()) {
 			ServerInterface srv =  (ServerInterface) iteWrite.next().getValue(); 
-			srv.setSeq(max); //set back
+			boolean setRes = false;
+			do{
+			setRes = srv.setSeq(max); //set back
+			} while(!setRes);
 		}
 		return true;
 		} catch (Exception e) {
@@ -238,6 +249,8 @@ public class ClinicServer implements ServerInterface {
 			return finalRes;
 			
 		}
+	  
+	
 		
 			
 }

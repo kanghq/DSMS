@@ -30,6 +30,8 @@ public class ManagerClient {
 	Map<String, ServerInterface> srvMap = new HashMap<String, ServerInterface>();
 	ServerInterface defSrv = null; //default server to get info
 	
+	public ManagerClient() {}
+	
 	public ManagerClient(String managerID) throws MalformedURLException, RemoteException, NotBoundException {
 		System.setSecurityManager(new RMISecurityManager());
 		
@@ -49,7 +51,7 @@ public class ManagerClient {
 		login(managerID);
 	}
 	
-	private boolean writeLog(String managerID, String content) {
+	protected boolean writeLog(String managerID, String content) {
 		File file = new File(managerID);
 		FileOutputStream outStream = null;
 		try {

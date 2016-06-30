@@ -1,14 +1,19 @@
 package com.hqkang.DSMS.test;
 
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContext;
+import org.omg.CosNaming.NamingContextHelper;
 
 import com.hqkang.DSMS.Client.ManagerClient;
+import com.hqkang.DSMS.Client.ManagerClientCorba;
 
 public class ClientDemo {
 	public static void main(String[] args) throws Exception {
-		ManagerClient user1 = new ManagerClient("mtl0001");
+		ORB orb = ORB.init(args, null);
+		org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+		NamingContext ncRef = NamingContextHelper.narrow(objRef);
+		ManagerClient user1 = new ManagerClientCorba("mtl0001", ncRef);
+		
 		user1.addDR("FN1", "LN1", "Montreal", "514222343", "Surgery", "mtl");
 		user1.addDR("FN2", "LN2", "Montreal", "514222343", "Surgery", "lvl");
 		user1.addDR("FN3", "LN3", "Montreal", "514222343", "Surgery", "mtl");
