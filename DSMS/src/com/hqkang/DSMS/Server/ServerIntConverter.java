@@ -8,9 +8,9 @@ import com.hqkang.DSMS.Server.ClinicSPackage.createRes;
 public final class ServerIntConverter {
 	 public static MapItem[] HashMap2Array(HashMap<String, String> h) {
 		 String[] keyA = null;
-		 keyA = (String[]) h.keySet().toArray();
+		 keyA = h.keySet().toArray(new String[h.keySet().size()]);
 		 String[] VA = null;
-		 VA = (String[]) h.values().toArray();
+		 VA = h.values().toArray(new String[h.values().size()]);
 		 MapItem[] res = new MapItem[h.size()];
 		 for(int i = 0; i < h.size(); i++) {
 			 res[i] = new MapItem(keyA[i],VA[i]);

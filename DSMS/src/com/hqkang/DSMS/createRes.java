@@ -1,6 +1,8 @@
 package com.hqkang.DSMS;
 
-public class createRes {
+import java.io.Serializable;
+
+public class createRes implements Serializable {
 	boolean res;
 	String RID;
 	public createRes(boolean _res, String _RID) {

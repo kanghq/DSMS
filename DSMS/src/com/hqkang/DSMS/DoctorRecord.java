@@ -20,7 +20,7 @@ public class DoctorRecord extends Record {
 	 * @param _loc
 	 */
 	public DoctorRecord(String _recordID, String _firstName, String _lastName, String _address, String _phone, String _specialization, Location _loc) {
-			this.recordID = _recordID;
+			this.recordID =  _recordID == null?"":_recordID;
 			this.firstName = _firstName;
 			this.lastName = _lastName;
 			this.address = _address;
@@ -38,7 +38,7 @@ public class DoctorRecord extends Record {
 	@Override
 	public com.hqkang.DSMS.Server.ClinicSPackage.Record record2CorbaRecord() {
 		// TODO Auto-generated method stub
-		return new com.hqkang.DSMS.Server.ClinicSPackage.Record (recordID, firstName, lastName, null, null, 0, address, phone, specialization, location.toString());
+		return new com.hqkang.DSMS.Server.ClinicSPackage.Record (recordID, firstName, lastName, "", "", 0, address, phone, specialization, location.toString(), this.getClass().getName());
 	}
 	
 

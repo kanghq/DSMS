@@ -70,7 +70,9 @@ public class ClientAdapter implements ServerInterface {
 	@Override
 	public createRes createRecord(com.hqkang.DSMS.Record r, String AID) {
 		// TODO Auto-generated method stub
-		return ServerIntConverter.CcreateRes2JcreateRes(srv.createRecord(r.record2CorbaRecord(), AID));
+		return ServerIntConverter.CcreateRes2JcreateRes(
+				srv.createRecord(
+						r.record2CorbaRecord(), AID));
 	}
 
 	@Override
@@ -108,6 +110,12 @@ public class ClientAdapter implements ServerInterface {
 	public boolean remove(String RID) {
 		// TODO Auto-generated method stub
 		return srv.remove(RID);
+	}
+
+	@Override
+	public boolean transferRecord(String rID, String remoteAdd, String aID) {
+		// TODO Auto-generated method stub
+		return srv.transferRecord(rID, remoteAdd, aID);
 	}
 
 	

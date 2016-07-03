@@ -21,7 +21,7 @@ public class ManagerClientCorba extends ManagerClient {
 		
 			
 		writeLog(managerID, "Logged in");
-		ServerInterface tempSrv =  new ClientAdapter("rmi://localhost:2020/srv", ncRef);
+		ServerInterface tempSrv =  new ClientAdapter("rmi://localhost:2020/srv".replaceAll("[^a-z^A-Z^0-9]", ""), ncRef);
 		srvURLMap = tempSrv.getSrvURLList();
 		srvUDPMap = tempSrv.getSrvUDPList();
 		Iterator<Entry<String,String>> ite = srvURLMap.entrySet().iterator();
@@ -30,7 +30,7 @@ public class ManagerClientCorba extends ManagerClient {
 		while(ite.hasNext()) {
 			Entry<String, String> e = ite.next();
 			String srvURL = e.getValue();
-			ServerInterface srv = (ServerInterface) new ClientAdapter(srvURL, ncRef);
+			ServerInterface srv = (ServerInterface) new ClientAdapter(srvURL.replaceAll("[^a-z^A-Z^0-9]", ""), ncRef);
 			srvMap.put(e.getKey(), srv);
 		}
 			login(managerID);

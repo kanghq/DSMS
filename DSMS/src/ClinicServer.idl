@@ -19,6 +19,7 @@ module Server{
 		string phone;
 		string specialization;
 		string location;
+		string class;
 		
 		};
 		struct MapItem { 
@@ -37,7 +38,7 @@ module Server{
 		boolean setSeq(in long s);
 		Record select(in string RID);
 		boolean remove(in string RID);
-		
+		boolean transferRecord(in string RID, in string remoteAdd,in string AID);
 		
 	};
 	

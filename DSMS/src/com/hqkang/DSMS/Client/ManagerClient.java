@@ -177,21 +177,15 @@ public class ManagerClient {
 		
 	}
 	
-	public void transferRecord(String RID, String remoteAdd, String AID) {
-		Record rec;
+	public boolean transferRecord(String RID, String remoteAdd, String AID) {
+		boolean stat = false;
 		try {
-			rec = defSrv.select(RID);
-		
-			createRes res = null;
-			do {
-				res = srvMap.get(remoteAdd).createRecord(rec, AID);
-			} while (res.getBoolean());
-			defSrv.remove(RID);
+			stat =  defSrv.transferRecord(RID, remoteAdd, AID);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		return stat;
 	}
 	
 	

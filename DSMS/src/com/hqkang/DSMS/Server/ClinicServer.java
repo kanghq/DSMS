@@ -26,6 +26,7 @@ public class ClinicServer implements ServerInterface {
 	private int count = 0;
 	private Database db;
 	private static Semaphore semp = new Semaphore(1);
+	private Semaphore seqLck = new Semaphore(1);
 	private HashMap<String, ServerInterface> srvMap = new HashMap<String, ServerInterface>();
 	
 
@@ -45,6 +46,10 @@ public class ClinicServer implements ServerInterface {
 	
 	public String getMyURL() {
 		return srvURLMap.get(location.toString());
+	}
+	
+	public String getMyLocation() {
+		return location.toString();
 	}
 		
 		
@@ -73,7 +78,7 @@ public class ClinicServer implements ServerInterface {
 		try {
 			semp.acquire();	
 			syncSeq();
-			if(r.recordID == null) {
+			if(r.recordID == null || r.recordID.equals("")) {
 			r.recordID = r.getType() + (new DecimalFormat("00000").format(seq));		
 			seq++;
 			}
@@ -118,12 +123,21 @@ public class ClinicServer implements ServerInterface {
 	public long getSeq() {
 		
 		writeLog(location + " syncing sequence starts");
+		try {
+			seqLck.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			seqLck.release();
+			return -1;
+		}
 		return seq;
 	}
 	
 	public boolean setSeq(long s) {
 		boolean res = false;
 		seq = s;
+		seqLck.release();
 		res = true;
 		writeLog(location + " syncing sequence completes");	
 		return res;
@@ -177,7 +191,10 @@ public class ClinicServer implements ServerInterface {
 	}
 	
 	public boolean remove(String RID) {
-		return db.delete(RID);
+		boolean res = db.delete(RID);
+		if(true == res) count--;
+		return res;
+		
 	}
 	
 	public void exportServer(int port) throws Exception {
@@ -189,8 +206,7 @@ public class ClinicServer implements ServerInterface {
 	}
 
 	 private boolean syncSeq() throws RemoteException {  //sync as an atomic operation
-		try {
-		semp.acquire();
+		
 		List<Long> seqList = new LinkedList<Long>();
 		Iterator<Entry<String, ServerInterface>> iteRead = srvMap.entrySet().iterator();
 		while(iteRead.hasNext()) {
@@ -208,17 +224,13 @@ public class ClinicServer implements ServerInterface {
 			} while(!setRes);
 		}
 		return true;
-		} catch (Exception e) {
-			return false;
-		} finally {
-		semp.release();
-			
-		}
+
 
 	}
 	 
 	 public boolean transferRecord(String RID, String remoteAdd,String AID) {
-			Record rec = null;
+		 
+			Record rec = null; 
 			int count = 0;
 			createRes res = null;
 			boolean remRes = false;
@@ -230,6 +242,7 @@ public class ClinicServer implements ServerInterface {
 					count++;
 					res = srvMap.get(remoteAdd).createRecord(rec, AID);
 				} while (!res.getBoolean()&&count<4);
+				if(remoteAdd.equals(this.getMyLocation())) return true;
 			
 				if(true == res.getBoolean()) {
 					remRes = remove(RID);

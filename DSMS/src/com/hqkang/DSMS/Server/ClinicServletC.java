@@ -109,7 +109,7 @@ public class ClinicServletC extends ClinicSPOA implements ClinicSOperations{
 	public void export(POA rootpoa,org.omg.CosNaming.NamingContextExt ncRef) {
 		
 		try {
-	     rootpoa.the_POAManager().activate();
+
 		
 		
 		org.omg.CORBA.Object srvRef = rootpoa.servant_to_reference(this);
@@ -117,15 +117,23 @@ public class ClinicServletC extends ClinicSPOA implements ClinicSOperations{
 		
 		NameComponent path[];
 		
-			path = ncRef.to_name(srv.getMyURL());
+			path = ncRef.to_name(srv.getMyURL().replaceAll("[^a-z^A-Z^0-9]", ""));
 		
 		ncRef.rebind(path, csO);
-		System.out.println("CORBA server exported");
+		System.out.println(srv.getMyLocation()+ " CORBA server exported");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+
+
+	@Override
+	public boolean transferRecord(String RID, String remoteAdd, String AID) {
+		// TODO Auto-generated method stub
+		return srv.transferRecord(RID, remoteAdd, AID);
 	}
 
 }

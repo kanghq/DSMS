@@ -27,6 +27,7 @@ public class ServerDemo {
 			POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
 		     rootpoa.the_POAManager().activate();
 		     
+		     
 			
 			
 			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
@@ -34,7 +35,7 @@ public class ServerDemo {
 
 			/*
 			java.lang.Object sync = new java.lang.Object();
-			synchronized(sync) {
+			 hronized(sync) {
 				sync.wait();
 			}*/
 			 

@@ -22,6 +22,7 @@ public interface ServerInterface extends Remote{
 	public boolean setSeq(long s) throws RemoteException;
 	public Record select(String RID) throws RemoteException;
 	public boolean remove(String RID) throws RemoteException;
+	public boolean transferRecord(String rID, String remoteAdd, String aID) throws RemoteException;
 
 	
 }

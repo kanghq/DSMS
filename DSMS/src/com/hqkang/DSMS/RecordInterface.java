@@ -12,11 +12,11 @@ public interface RecordInterface {
 	 */
 	public static Record CorbaRecord2Record(com.hqkang.DSMS.Server.ClinicSPackage.Record s) {
 		Record r = null;
-		if(s.recordID.contains("N")) {
-			r = new NurseRecord(null, s.firstName, s.lastName, Designation.valueOf(s.designation), Status.valueOf(s.status), (java.util.Date)new java.util.Date(s.statusdate));
+		if(s._class.equals(NurseRecord.class.getName())) {
+			r = new NurseRecord("", s.firstName, s.lastName, Designation.valueOf(s.designation), Status.valueOf(s.status), (java.util.Date)new java.util.Date(s.statusdate));
 		}
-		if(s.recordID.contains("D")) {
-			r = new DoctorRecord(null, s.firstName, s.lastName, s.address, s.phone, s.specialization, Location.valueOf(s.location));
+		if(s._class.equals(DoctorRecord.class.getName())) {
+			r = new DoctorRecord("", s.firstName, s.lastName, s.address, s.phone, s.specialization, Location.valueOf(s.location));
 		}
 		return r;
 	}
